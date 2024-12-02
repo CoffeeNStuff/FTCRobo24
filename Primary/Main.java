@@ -31,13 +31,11 @@ public class Main extends LinearOpMode {
             }
             
             if (gamepad2.dpad_up) {
-                hw.lift(1);
-                sleep(50);
+                hw.pwrLift(1);
             } else if (gamepad2.dpad_down) { 
-                hw.lift(-1); 
-                sleep(50);
+                hw.pwrLift(-1); 
             } else {
-                hw.lift(hw.IdlePwr_C); 
+                hw.lift(0); 
             }
             
             if (gamepad2.left_trigger > 0){

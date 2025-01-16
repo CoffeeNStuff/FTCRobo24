@@ -22,20 +22,21 @@ public void multitask (MyThread[] tasks) {
 
 
 @Override public void runOpMode() {
-	runningTask<int[3], void> = (args) -> hw.driveOneWheel(args[0], args[1], args[2]); 
-	extendingTask<int, void> = (arg) -> hw.extend(arg); 
-
-	multitask( 
-		{ new MyThread<> (runningTask, {90, 0, .5}), 
-		  new MyThread<> (extendingTask, 1) }); 
 
    hw.init(hardwareMap);
    waitForStart();
    hw.clock.reset();
  //score pre-load takes about 8 sec
    hw.setClaw(0);
-   hw.pwrLift(hw.Hieght_of_bar + 10, 1);
-   hw.driveConst(40, .25);       
+
+	runningTask<int[2], void> = (args) -> hw.driveConst(args[0], args[1]); 
+	extendingTask<int, void> = (arg) -> hw.pwrLift(args[0], args[1]); 
+
+	multitask( 
+		{ new MyThread<> (runningTask, { 40, .25}), 
+		  new MyThread<> (extendingTask, { hw.Hieght_of_bar + 10, 1 })
+		}
+	); 
    hw.driveOld(25, .125);
    hw.pwrLift(hw.Hieght_of_bar, -1);
    hw.setClaw(.6);

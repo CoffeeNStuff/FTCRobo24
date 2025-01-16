@@ -8,7 +8,27 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 public class ExpFarAuto extends LinearOpMode {
     Hardware hw = new Hardware(); 
     
+public void multitask (MyThread[] tasks) { 
+	for (int i = 0; i <= tasks.length; i++) { 
+		tasks[i].start();
+	}
+}
+
+// an example calling hw.driveOneWheel(90, 0, .5) and hw.extend(1);
+
+// this is called a lambda expression, just another syntax of writing a function
+// by defining it this way i can express the arguments as an array of 3 ints, which
+// is easier and marginally faster tha alternate methods
+
+
 @Override public void runOpMode() {
+	runningTask<int[3], void> = (args) -> hw.driveOneWheel(args[0], args[1], args[2]); 
+	extendingTask<int, void> = (arg) -> hw.extend(arg); 
+
+	multitask( 
+		{ new MyThread<> (runningTask, {90, 0, .5}), 
+		  new MyThread<> (extendingTask, 1) }); 
+
    hw.init(hardwareMap);
    waitForStart();
    hw.clock.reset();
